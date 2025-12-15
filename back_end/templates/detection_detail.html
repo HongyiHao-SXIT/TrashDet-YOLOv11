@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>识别详情 - ID {{ detect.id }}</h2>
+
+<img src="{{ url_for('static', filename='results/' + (detect.result_image or detect.filename)) }}" width="800">
+
+<p><strong>原始文件：</strong> {{ detect.filename }}</p>
+<p><strong>类别：</strong> {{ detect.classes }}</p>
+<p><strong>数量：</strong> {{ detect.count }}</p>
+<p><strong>平均置信度：</strong> {{ detect.confidence_avg }}</p>
+<p><strong>时间：</strong> {{ detect.timestamp }}</p>
+
+{% if detect.latitude and detect.longitude %}
+  <p>位置：{{ detect.latitude }}, {{ detect.longitude }} （地图可查看）</p>
+  <p><a href="{{ url_for('map.index') }}">查看地图</a></p>
+{% endif %}
+{% endblock %}

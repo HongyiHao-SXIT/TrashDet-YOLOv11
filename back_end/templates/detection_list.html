@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>识别记录列表</h2>
+<table class="table">
+  <thead><tr><th>ID</th><th>图片</th><th>Classes</th><th>Count</th><th>Time</th><th>Action</th></tr></thead>
+  <tbody>
+    {% for r in page_data.items %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td><img src="{{ url_for('static', filename='results/' + (r.result_image or r.filename)) }}" width="120"></td>
+      <td>{{ r.classes }}</td>
+      <td>{{ r.count }}</td>
+      <td>{{ r.timestamp }}</td>
+      <td><a href="{{ url_for('dashboard.view_detection', detect_id=r.id) }}">查看</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="pagination">
+  {% if page_data.has_prev %}
+    <a href="{{ url_for('dashboard.list_detections', page=page_data.prev_num) }}">上一页</a>
+  {% endif %}
+  Page {{ page_data.page }} / {{ page_data.pages }}
+  {% if page_data.has_next %}
+    <a href="{{ url_for('dashboard.list_detections', page=page_data.next_num) }}">下一页</a>
+  {% endif %}
+</div>
+{% endblock %}

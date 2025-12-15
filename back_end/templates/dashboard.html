@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+
+<div style="display:flex; gap:30px;">
+  <div style="width:45%">
+    <h3>每日检测次数</h3>
+    <canvas id="dailyChart"></canvas>
+  </div>
+  <div style="width:45%">
+    <h3>类别占比</h3>
+    <canvas id="classChart"></canvas>
+  </div>
+</div>
+
+<h3>最近记录</h3>
+<table class="table">
+  <thead><tr><th>ID</th><th>图片</th><th>类别</th><th>数量</th><th>时间</th><th>操作</th></tr></thead>
+  <tbody>
+    {% for r in recent %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td><img src="{{ url_for('static', filename='results/' + (r.result_image or r.filename)) }}" alt="img" width="120"></td>
+      <td>{{ r.classes }}</td>
+      <td>{{ r.count }}</td>
+      <td>{{ r.timestamp }}</td>
+      <td><a href="{{ url_for('dashboard.view_detection', detect_id=r.id) }}">查看</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+const daily = {{ daily_counts|tojson }};
+const labels = daily.map(x=>x[0]);
+const values = daily.map(x=>x[1]||0);
+
+new Chart(document.getElementById("dailyChart"), {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [{ label: "检测次数", data: values, fill:false }]
+  }
+});
+
+const classData = {{ class_data|tojson }};
+const classLabels = Object.keys(classData);
+const classValues = Object.values(classData);
+
+new Chart(document.getElementById("classChart"), {
+  type: "pie",
+  data: { labels: classLabels, datasets: [{ data: classValues }] }
+});
+</script>
+{% endblock %}

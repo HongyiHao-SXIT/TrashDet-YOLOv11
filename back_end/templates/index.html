@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>上传图片并运行 YOLO</h2>
+<form method="post" action="{{ url_for('detect.upload') }}" enctype="multipart/form-data">
+  <input type="file" name="file" accept="image/*" required>
+  <button type="submit">上传并检测</button>
+</form>
+<hr>
+<p>或者去 <a href="{{ url_for('dashboard.index') }}">Dashboard</a> 查看统计。</p>
+{% endblock %}
