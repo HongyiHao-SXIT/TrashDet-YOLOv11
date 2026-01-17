@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 def main():
-    model = YOLO(r"detect\runs\train\train-200epoch-v11n.pt-bs16\weights\best.pt")
+    model = YOLO(r"best.pt")
 
     resize_width = 320
     resize_height = 240
